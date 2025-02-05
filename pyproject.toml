@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "fmp-api"
+version = "0.0.1.dev1"
+description = "Financial Modeling Prep API"
+authors = ["Stephen Yau <softwareentrepreneer+fmp-api@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fmpsdk = "^20250102.0"
+httpx = "^0.28.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
