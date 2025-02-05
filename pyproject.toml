@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "fmp-client"
+name = "fmp-api-client"
 version = "0.0.1.dev1"
 description = "Financial Modeling Prep API"
-authors = ["Stephen Yau <softwareentrepreneer+fmp-api@gmail.com>"]
+authors = ["Stephen Yau <softwareentrepreneer+fmp-api-client@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
