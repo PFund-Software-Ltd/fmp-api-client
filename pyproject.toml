@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fmp-api"
+name = "fmp-client"
 version = "0.0.1.dev1"
 description = "Financial Modeling Prep API"
 authors = ["Stephen Yau <softwareentrepreneer+fmp-api@gmail.com>"]
