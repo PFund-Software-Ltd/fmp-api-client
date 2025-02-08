@@ -10,10 +10,12 @@ class FMPClient:
     def __init__(self, api_key: str | None = None):
         from fmp_api_client.search import Search
         from fmp_api_client.directory import Directory
+        from fmp_api_client.analyst import Analyst
         self._api_key = api_key or os.getenv('FMP_API_KEY')
         assert self._api_key, 'FMP_API_KEY is not set'
         self.search = Search(self)
         self.directory = Directory(self)
+        self.analyst = Analyst(self)
 
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
         url = f'{self._BASE_URL}/{endpoint}'
@@ -31,8 +33,14 @@ class FMPClient:
 
 
 if __name__ == '__main__':
+    from pprint import pprint
     client = FMPClient()
-    # res = client.search.stock_symbol_search('AAPL')
-    # print(res)
-    res = client.search.exchange_variants('AAPL')
-    print(res)
+    res = client.analyst.stock_grade_latest_news(
+        limit=100,
+        symbol='BLK',
+        # limit=10,
+        # page=2,
+        start_date='2025-01-29',
+        end_date='2025-02-03',
+    )
+    pprint(res)
