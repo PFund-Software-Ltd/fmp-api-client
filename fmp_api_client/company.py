@@ -64,7 +64,6 @@ class Company(Base):
     @requires_plan(FMPPlan.BASIC)
     async def adelisted_companies(self, limit: int | None = None, page: int | None = None) -> list[dict]:
         '''
-        Stay informed. 
         Access a comprehensive list of companies that have been delisted from US exchanges to avoid trading in risky stocks and identify potential financial troubles.
         '''
         endpoint = 'delisted-companies'
