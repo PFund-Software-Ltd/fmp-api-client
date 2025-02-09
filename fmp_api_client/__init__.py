@@ -1,5 +1,7 @@
 from dotenv import load_dotenv, find_dotenv
 
+from fmp_api_client.client import FMPClient
+
 
 env_file_path = find_dotenv(usecwd=True, raise_error_if_not_found=False)
 if env_file_path:
