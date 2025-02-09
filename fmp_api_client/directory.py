@@ -54,7 +54,7 @@ class Directory(Base):
     @requires_plan(FMPPlan.STARTER)
     async def asymbol_changes(
         self,
-        invalid: bool | None = None,
+        invalid: bool=False,
         limit: int | None = None,
     ) -> list[dict]:
         '''
@@ -62,9 +62,7 @@ class Directory(Base):
         Track changes due to mergers, acquisitions, stock splits, and name changes to ensure accurate trading and analysis.
         '''
         endpoint = 'symbol-change'
-        params = {}
-        if invalid:
-            params['invalid'] = invalid
+        params = {'invalid': invalid}
         if limit:
             params['limit'] = limit
         return await self._request(endpoint, params=params)
@@ -72,7 +70,7 @@ class Directory(Base):
     @requires_plan(FMPPlan.STARTER)
     def symbol_changes(
         self,
-        invalid: bool | None = None,
+        invalid: bool=False,
         limit: int | None = None,
     ) -> list[dict]:
         return asyncio.run(self.asymbol_changes(invalid, limit))

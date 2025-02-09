@@ -12,11 +12,15 @@ class FMPClient:
         from fmp_api_client.directory import Directory
         from fmp_api_client.analyst import Analyst
         from fmp_api_client.news import News
+        from fmp_api_client.company import Company
+        from fmp_api_client.calendar import Calendar
         self._api_key = api_key or os.getenv('FMP_API_KEY') or os.getenv('FINANCIAL_MODELING_PREP_API_KEY')
         assert self._api_key, 'FMP_API_KEY or FINANCIAL_MODELING_PREP_API_KEYis not set'
         self.search = Search(self)
         self.directory = Directory(self)
         self.analyst = Analyst(self)
+        self.calendar = Calendar(self)
+        self.company = Company(self)
         self.news = News(self)
 
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
@@ -32,19 +36,3 @@ class FMPClient:
                 print(f"An error occurred while requesting {e.request.url!r}.")
             except httpx.HTTPStatusError as e:
                 print(f"Error response {e.response.status_code} while requesting {e.request.url!r}.")
-
-
-if __name__ == '__main__':
-    from pprint import pprint
-    client = FMPClient()
-    res = client.news.search_forex_news(
-        # from_='2025-02-05',
-        # to='2025-02-06',
-        # invalid=True,
-        # limit=10,
-        # page=2,
-        # symbols=['FTAI']
-        # symbols=['BTCUSD']
-        symbols=['EURUSD']
-    )
-    pprint(res)
