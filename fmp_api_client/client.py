@@ -11,11 +11,13 @@ class FMPClient:
         from fmp_api_client.search import Search
         from fmp_api_client.directory import Directory
         from fmp_api_client.analyst import Analyst
-        self._api_key = api_key or os.getenv('FMP_API_KEY')
-        assert self._api_key, 'FMP_API_KEY is not set'
+        from fmp_api_client.news import News
+        self._api_key = api_key or os.getenv('FMP_API_KEY') or os.getenv('FINANCIAL_MODELING_PREP_API_KEY')
+        assert self._api_key, 'FMP_API_KEY or FINANCIAL_MODELING_PREP_API_KEYis not set'
         self.search = Search(self)
         self.directory = Directory(self)
         self.analyst = Analyst(self)
+        self.news = News(self)
 
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
         url = f'{self._BASE_URL}/{endpoint}'
@@ -35,12 +37,14 @@ class FMPClient:
 if __name__ == '__main__':
     from pprint import pprint
     client = FMPClient()
-    res = client.analyst.stock_grade_latest_news(
-        limit=100,
-        symbol='BLK',
+    res = client.news.search_forex_news(
+        # from_='2025-02-05',
+        # to='2025-02-06',
+        # invalid=True,
         # limit=10,
         # page=2,
-        start_date='2025-01-29',
-        end_date='2025-02-03',
+        # symbols=['FTAI']
+        # symbols=['BTCUSD']
+        symbols=['EURUSD']
     )
     pprint(res)

@@ -2,9 +2,11 @@ import asyncio
 import datetime
 
 from fmp_api_client.base import Base
+from fmp_api_client.plan import requires_plan, FMPPlan
 
 
 class Analyst(Base):
+    @requires_plan(FMPPlan.BASIC)
     async def afinancial_estimates(
         self,
         symbol: str,
@@ -29,6 +31,7 @@ class Analyst(Base):
             params['limit'] = limit
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def financial_estimates(
         self, 
         symbol: str, 
@@ -45,6 +48,7 @@ class Analyst(Base):
             )
         )
 
+    @requires_plan(FMPPlan.BASIC)
     async def aratings_snapshot(
         self,
         symbol: str,
@@ -60,6 +64,7 @@ class Analyst(Base):
             params['limit'] = limit
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def ratings_snapshot(self, symbol: str, limit: int | None = None) -> list[dict]:
         return asyncio.run(
             self.aratings_snapshot(
@@ -68,6 +73,7 @@ class Analyst(Base):
             )
         )
 
+    @requires_plan(FMPPlan.BASIC)
     async def ahistorical_ratings(
         self,
         symbol: str,
@@ -83,6 +89,7 @@ class Analyst(Base):
             params['limit'] = limit
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def historical_ratings(self, symbol: str, limit: int | None = None) -> list[dict]:
         return asyncio.run(
             self.ahistorical_ratings(
@@ -91,6 +98,7 @@ class Analyst(Base):
             )
         )
 
+    @requires_plan(FMPPlan.BASIC)
     async def aprice_target_summary(
         self,
         symbol: str,
@@ -109,6 +117,7 @@ class Analyst(Base):
             params['page'] = page
         return await self._request(endpoint, params=params)
 
+    @requires_plan(FMPPlan.BASIC)
     def price_target_summary(self, symbol: str, limit: int | None = None, page: str='') -> list[dict]:
         return asyncio.run(
             self.aprice_target_summary(
@@ -118,6 +127,7 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def aprice_target_consensus(
         self,
         symbol: str,
@@ -136,6 +146,7 @@ class Analyst(Base):
             params['page'] = page
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def price_target_consensus(self, symbol: str, limit: int | None = None, page: int | None = None) -> list[dict]:
         return asyncio.run(
             self.aprice_target_consensus(
@@ -145,6 +156,7 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def aprice_target_news(
         self,
         symbol: str,
@@ -163,6 +175,7 @@ class Analyst(Base):
             params['page'] = page
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def price_target_news(
         self, 
         symbol: str, 
@@ -177,12 +190,13 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def aprice_target_latest_news(
         self,
         limit: int | None = None,
         page: int | None = None,
         # NOTE: custom params
-        symbol: str | None = None,
+        symbols: list[str] | None = None,
     ) -> list[dict]:
         '''
         Stay updated with the most recent analyst price target updates for ALL stock symbols. 
@@ -195,25 +209,28 @@ class Analyst(Base):
         if page:
             params['page'] = page
         result = await self._request(endpoint, params=params)
-        if symbol:
-            result = [r for r in result if r['symbol'] == symbol.upper()]
+        if symbols:
+            symbols = [s.upper() for s in symbols]
+            result = [r for r in result if r['symbol'] in symbols]
         return result
     
+    @requires_plan(FMPPlan.BASIC)
     def price_target_latest_news(
         self,
         limit: int | None = None,
         page: int | None = None,
         # NOTE: custom params
-        symbol: str | None = None,
+        symbols: list[str] | None = None,
     ) -> list[dict]:
         return asyncio.run(
             self.aprice_target_latest_news(
                 limit=limit, 
                 page=page, 
-                symbol=symbol,
+                symbols=symbols,
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def astock_grades(
         self, 
         symbol: str,
@@ -238,6 +255,7 @@ class Analyst(Base):
         ]
         return result
     
+    @requires_plan(FMPPlan.BASIC)
     def stock_grades(
         self, 
         symbol: str,
@@ -253,6 +271,7 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def ahistorical_stock_grades(
         self,
         symbol: str,
@@ -277,6 +296,7 @@ class Analyst(Base):
         ]
         return result
     
+    @requires_plan(FMPPlan.BASIC)
     def historical_stock_grades(
         self,
         symbol: str, 
@@ -294,6 +314,7 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def astock_grades_summary(
         self,
         symbol: str,
@@ -313,6 +334,7 @@ class Analyst(Base):
             params['limit'] = limit
         return await self._request(endpoint, params=params)
 
+    @requires_plan(FMPPlan.BASIC)
     def stock_grades_summary(
         self,
         symbol: str,
@@ -327,6 +349,7 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def astock_grade_news(
         self,
         symbol: str,
@@ -355,6 +378,7 @@ class Analyst(Base):
         ]
         return result
     
+    @requires_plan(FMPPlan.BASIC)
     def stock_grade_news(
         self,
         symbol: str,
@@ -374,12 +398,13 @@ class Analyst(Base):
             )
         )
     
+    @requires_plan(FMPPlan.BASIC)
     async def astock_grade_latest_news(
         self,
         limit: int | None = None,
         page: int | None = None,
         # NOTE: custom params
-        symbol: str | None = None,
+        symbols: list[str] | None = None,
         start_date: str='',
         end_date: str='',
     ) -> list[dict]:
@@ -396,20 +421,22 @@ class Analyst(Base):
         if page:
             params['page'] = page
         result = await self._request(endpoint, params=params)
-        if symbol:
-            result = [r for r in result if r['symbol'] == symbol.upper()]
+        if symbols:
+            symbols = [s.upper() for s in symbols]
+            result = [r for r in result if r['symbol'] in symbols]
         result = [
             r for r in result 
             if start_date <= datetime.datetime.strptime(r['publishedDate'], '%Y-%m-%dT%H:%M:%S.%fZ') <= end_date
         ]
         return result
     
+    @requires_plan(FMPPlan.BASIC)
     def stock_grade_latest_news(
         self,
         limit: int | None = None,
         page: int | None = None,
         # NOTE: custom params
-        symbol: str | None = None,
+        symbols: list[str] | None = None,
         start_date: str='',
         end_date: str='',
     ) -> list[dict]:
@@ -417,7 +444,7 @@ class Analyst(Base):
             self.astock_grade_latest_news(
                 limit=limit, 
                 page=page, 
-                symbol=symbol, 
+                symbols=symbols, 
                 start_date=start_date, 
                 end_date=end_date
             )

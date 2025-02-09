@@ -1,9 +1,11 @@
 import asyncio
 
 from fmp_api_client.base import Base
+from fmp_api_client.plan import FMPPlan, requires_plan
 
 
 class Search(Base):
+    @requires_plan(FMPPlan.BASIC)
     async def astock_symbol(
         self, 
         query: str,
@@ -26,9 +28,11 @@ class Search(Base):
             params['exchange'] = exchange
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def stock_symbol(self, query: str, limit: int | None = None, exchange: str = '') -> list[dict]:
         return asyncio.run(self.astock_symbol(query, limit, exchange))
     
+    @requires_plan(FMPPlan.BASIC)
     async def acompany_name(
         self,
         query: str,
@@ -47,9 +51,11 @@ class Search(Base):
             params['exchange'] = exchange
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)    
     def company_name(self, query: str, limit: int | None = None, exchange: str = '') -> list[dict]:
         return asyncio.run(self.acompany_name(query, limit, exchange))
 
+    @requires_plan(FMPPlan.BASIC)
     async def aCIK(
         self,
         cik: str,
@@ -65,9 +71,11 @@ class Search(Base):
             params['limit'] = limit
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def CIK(self, cik: str, limit: int | None = None) -> list[dict]:
         return asyncio.run(self.aCik(cik, limit))
-        
+    
+    @requires_plan(FMPPlan.BASIC)  
     async def aCUSIP(self, cusip: str) -> list[dict]:
         '''
         Search and retrieve financial securities information by CUSIP number.
@@ -77,9 +85,11 @@ class Search(Base):
         params = {'cusip': cusip}
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def CUSIP(self, cusip: str) -> list[dict]:
         return asyncio.run(self.aCUSIP(cusip))
     
+    @requires_plan(FMPPlan.BASIC)
     async def aISIN(self, isin: str) -> list[dict]:
         '''
         search and retrieve the International Securities Identification Number (ISIN) for financial securities. 
@@ -89,10 +99,12 @@ class Search(Base):
         params = {'isin': isin}
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)
     def ISIN(self, isin: str) -> list[dict]:
         return asyncio.run(self.aISIN(isin))
     
     # TODO: find out the supported values for e.g. sector, industry, etc.
+    @requires_plan(FMPPlan.BASIC)
     async def astock_screener(
         self,
         marketCapMoreThan: int | None = None,
@@ -123,6 +135,7 @@ class Search(Base):
         params = {k: v for k, v in locals().items() if v is not None and k not in ('self', 'endpoint')}
         return await self._request(endpoint, params=params)
         
+    @requires_plan(FMPPlan.BASIC)
     def stock_screener(
         self,
         marketCapMoreThan: int | None = None,
@@ -150,6 +163,7 @@ class Search(Base):
 
     # NOTE: despite the name, this is actually useful to get a company's:
     # description, logo image, CEO, market cap, price, beta, cik, isin, cusip, industry, sector, website, number of employees
+    @requires_plan(FMPPlan.BASIC)
     async def aexchange_variants(self, symbol: str) -> list[dict]:
         '''
         Search across multiple public exchanges to find where a given stock symbol is listed. 
@@ -159,5 +173,6 @@ class Search(Base):
         params = {'symbol': symbol}
         return await self._request(endpoint, params=params)
     
+    @requires_plan(FMPPlan.BASIC)    
     def exchange_variants(self, symbol: str) -> list[dict]:
         return asyncio.run(self.aexchange_variants(symbol))
