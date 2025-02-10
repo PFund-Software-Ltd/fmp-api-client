@@ -16,6 +16,7 @@ class News(Base):
         # NOTE: custom params
         start_date: str='',
         end_date: str='',
+        symbols: list[str] | None = None,
     ) -> list[dict]:
         '''
         Access the latest articles from Financial Modeling Prep. 
@@ -28,11 +29,14 @@ class News(Base):
             params['page'] = page
         if limit:
             params['limit'] = limit
-        result = await self._request(endpoint, params=params)
-        result = [
-            r for r in result 
-            if start_date <= datetime.datetime.strptime(r['date'], '%Y-%m-%d %H:%M:%S') <= end_date
-        ]
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+            result = [
+                r for r in result 
+                if start_date <= datetime.datetime.strptime(r['date'], '%Y-%m-%d %H:%M:%S') <= end_date
+                and (not symbols or r['tickers'].split(':')[-1] in symbols)
+            ]
         return result
     
     @requires_plan(FMPPlan.BASIC)
@@ -43,6 +47,7 @@ class News(Base):
         # NOTE: custom params
         start_date: str='',
         end_date: str='',
+        symbols: list[str] | None = None,
     ) -> list[dict]:
         return asyncio.run(
             self.aFMP_articles(
@@ -50,6 +55,7 @@ class News(Base):
                 limit=limit, 
                 start_date=start_date, 
                 end_date=end_date,
+                symbols=symbols,
             )
         )
 
@@ -95,6 +101,8 @@ class News(Base):
         to: str = '',
         page: int | None = None,
         limit: int | None = None,
+        # NOTE: custom params
+        symbols: list[str] | None = None,
     ) -> list[dict]:
         '''
         Access official company press releases. 
@@ -110,7 +118,11 @@ class News(Base):
             params['page'] = page
         if limit:
             params['limit'] = limit
-        return await self._request(endpoint, params=params)
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+                result = [r for r in result if r['symbol'] in symbols]
+        return result
     
     @requires_plan(FMPPlan.PREMIUM)
     def press_releases(
@@ -119,8 +131,10 @@ class News(Base):
         to: str = '',
         page: int | None = None,
         limit: int | None = None,
+        # NOTE: custom params
+        symbols: list[str] | None = None,
     ) -> list[dict]:
-        return asyncio.run(self.apress_releases(from_, to, page, limit))
+        return asyncio.run(self.apress_releases(from_, to, page, limit, symbols))
     
     @requires_plan(FMPPlan.STARTER)
     async def astock_news(
@@ -146,10 +160,10 @@ class News(Base):
             params['page'] = page
         if limit:
             params['limit'] = limit
-        result = await self._request(endpoint, params=params)
-        if symbols:
-            symbols = [s.upper() for s in symbols]
-            result = [r for r in result if r['symbol'] in symbols]
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+                result = [r for r in result if r['symbol'] in symbols]
         return result
     
     @requires_plan(FMPPlan.STARTER)
@@ -196,10 +210,10 @@ class News(Base):
             params['page'] = page
         if limit:
             params['limit'] = limit
-        result = await self._request(endpoint, params=params)
-        if symbols:
-            symbols = [s.upper() for s in symbols]
-            result = [r for r in result if r['symbol'] in symbols]
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+                result = [r for r in result if r['symbol'] in symbols]
         return result
     
     @requires_plan(FMPPlan.STARTER)
@@ -246,10 +260,10 @@ class News(Base):
             params['page'] = page
         if limit:
             params['limit'] = limit
-        result = await self._request(endpoint, params=params)
-        if symbols:
-            symbols = [s.upper() for s in symbols]
-            result = [r for r in result if r['symbol'] in symbols]
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+                result = [r for r in result if r['symbol'] in symbols]
         return result
     
     @requires_plan(FMPPlan.STARTER)

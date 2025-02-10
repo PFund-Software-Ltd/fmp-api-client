@@ -1,8 +1,11 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from fmp_api_client.client import FMPClient
+    from fmp_api_client.plan import FMPPlan
+    
 import inspect
 import datetime
-
-from fmp_api_client.client import FMPClient
-from fmp_api_client.plan import FMPPlan
 
 
 class Base:

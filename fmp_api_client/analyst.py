@@ -208,10 +208,10 @@ class Analyst(Base):
             params['limit'] = limit
         if page:
             params['page'] = page
-        result = await self._request(endpoint, params=params)
-        if symbols:
-            symbols = [s.upper() for s in symbols]
-            result = [r for r in result if r['symbol'] in symbols]
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+                result = [r for r in result if r['symbol'] in symbols]
         return result
     
     @requires_plan(FMPPlan.BASIC)
@@ -248,11 +248,11 @@ class Analyst(Base):
         endpoint = 'grades'
         params = {'symbol': symbol}
         start_date, end_date = self._prepare_dates(start_date, end_date)
-        result = await self._request(endpoint, params=params)
-        result = [
-            r for r in result 
-            if start_date <= datetime.datetime.strptime(r['date'], '%Y-%m-%d') <= end_date
-        ]
+        if result := await self._request(endpoint, params=params):
+            result = [
+                r for r in result 
+                if start_date <= datetime.datetime.strptime(r['date'], '%Y-%m-%d') <= end_date
+            ]
         return result
     
     @requires_plan(FMPPlan.BASIC)
@@ -289,11 +289,11 @@ class Analyst(Base):
         start_date, end_date = self._prepare_dates(start_date, end_date)
         if limit:
             params['limit'] = limit
-        result = await self._request(endpoint, params=params)
-        result = [
-            r for r in result 
-            if start_date <= datetime.datetime.strptime(r['date'], '%Y-%m-%d') <= end_date
-        ]
+        if result := await self._request(endpoint, params=params):
+            result = [
+                r for r in result 
+                if start_date <= datetime.datetime.strptime(r['date'], '%Y-%m-%d') <= end_date
+            ]
         return result
     
     @requires_plan(FMPPlan.BASIC)
@@ -371,11 +371,11 @@ class Analyst(Base):
             params['limit'] = limit
         if page:
             params['page'] = page
-        result = await self._request(endpoint, params=params)
-        result = [
-            r for r in result 
-            if start_date <= datetime.datetime.strptime(r['publishedDate'], '%Y-%m-%dT%H:%M:%S.%fZ') <= end_date
-        ]
+        if result := await self._request(endpoint, params=params):
+            result = [
+                r for r in result 
+                if start_date <= datetime.datetime.strptime(r['publishedDate'], '%Y-%m-%dT%H:%M:%S.%fZ') <= end_date
+            ]
         return result
     
     @requires_plan(FMPPlan.BASIC)
@@ -420,14 +420,14 @@ class Analyst(Base):
             params['limit'] = limit
         if page:
             params['page'] = page
-        result = await self._request(endpoint, params=params)
-        if symbols:
-            symbols = [s.upper() for s in symbols]
-            result = [r for r in result if r['symbol'] in symbols]
-        result = [
-            r for r in result 
-            if start_date <= datetime.datetime.strptime(r['publishedDate'], '%Y-%m-%dT%H:%M:%S.%fZ') <= end_date
-        ]
+        if result := await self._request(endpoint, params=params):
+            if symbols:
+                symbols = [s.upper() for s in symbols]
+            result = [
+                r for r in result 
+                if start_date <= datetime.datetime.strptime(r['publishedDate'], '%Y-%m-%dT%H:%M:%S.%fZ') <= end_date
+                and (not symbols or r['symbol'] in symbols)
+            ]
         return result
     
     @requires_plan(FMPPlan.BASIC)
