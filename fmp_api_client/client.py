@@ -14,6 +14,8 @@ class FMPClient:
         from fmp_api_client.news import News
         from fmp_api_client.company import Company
         from fmp_api_client.calendar import Calendar
+        from fmp_api_client.economics import Economics
+        from fmp_api_client.statements import Statements
         self._api_key = api_key or os.getenv('FMP_API_KEY') or os.getenv('FINANCIAL_MODELING_PREP_API_KEY')
         assert self._api_key, 'FMP_API_KEY or FINANCIAL_MODELING_PREP_API_KEYis not set'
         self.search = Search(self)
@@ -22,6 +24,8 @@ class FMPClient:
         self.calendar = Calendar(self)
         self.company = Company(self)
         self.news = News(self)
+        self.economics = Economics(self)
+        self.statements = Statements(self)
 
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
         url = f'{self._BASE_URL}/{endpoint}'
