@@ -13,6 +13,7 @@ from fmp_api_client.statements import Statements
 from fmp_api_client.market_performance import MarketPerformance
 from fmp_api_client.quote import Quote
 from fmp_api_client.market_hours import MarketHours
+from fmp_api_client.discounted_cashflow import DiscountedCashflow
 
 
 class FMPClient:
@@ -32,6 +33,7 @@ class FMPClient:
         self.market_performance = MarketPerformance(self)
         self.market_hours = MarketHours(self)
         self.quote = Quote(self)
+        self.discounted_cashflow = DiscountedCashflow(self)
         
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
         url = f'{self._BASE_URL}/{endpoint}'
