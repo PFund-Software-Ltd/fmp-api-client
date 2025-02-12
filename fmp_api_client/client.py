@@ -12,6 +12,7 @@ from fmp_api_client.economics import Economics
 from fmp_api_client.statements import Statements
 from fmp_api_client.market_performance import MarketPerformance
 from fmp_api_client.quote import Quote
+from fmp_api_client.market_hours import MarketHours
 
 
 class FMPClient:
@@ -29,6 +30,7 @@ class FMPClient:
         self.economics = Economics(self)
         self.statements = Statements(self)
         self.market_performance = MarketPerformance(self)
+        self.market_hours = MarketHours(self)
         self.quote = Quote(self)
         
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
