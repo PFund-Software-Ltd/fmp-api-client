@@ -10,6 +10,7 @@ from fmp_api_client.company import Company
 from fmp_api_client.calendar import Calendar
 from fmp_api_client.economics import Economics
 from fmp_api_client.statements import Statements
+from fmp_api_client.market_performance import MarketPerformance
 
 
 class FMPClient:
@@ -26,6 +27,7 @@ class FMPClient:
         self.news = News(self)
         self.economics = Economics(self)
         self.statements = Statements(self)
+        self.market_performance = MarketPerformance(self)
 
     async def _request(self, endpoint: str, params: dict | None = None, method: str='GET') -> dict | list | None:
         url = f'{self._BASE_URL}/{endpoint}'
