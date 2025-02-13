@@ -93,8 +93,15 @@ class Indexes(Base):
         return await self._request(endpoint, params=params)
     
     @requires_plan(FMPPlan.BASIC)
-    def historical_stock_index_price_data(self, symbol: str, from_: str = '', to: str = '') -> list[dict]:
-        return asyncio.run(self.ahistorical_stock_index_price_data(symbol, from_, to))
+    def historical_stock_index_price_data(
+        self, 
+        symbol: str, 
+        from_: str = '', 
+        to: str = '', 
+        # NOTE: custom params
+        short: bool = True
+    ) -> list[dict]:
+        return asyncio.run(self.ahistorical_stock_index_price_data(symbol, from_, to, short))
     
     @requires_plan(FMPPlan.STARTER)
     async def astock_index_price_by_interval(
@@ -121,7 +128,14 @@ class Indexes(Base):
         return await self._request(endpoint, params=params)
     
     @requires_plan(FMPPlan.BASIC)
-    def stock_index_price_by_interval(self, symbol: str, from_: str = '', to: str = '', interval: Literal['1min', '5min', '1hour'] = '1min') -> list[dict]:
+    def stock_index_price_by_interval(
+        self, 
+        symbol: str, 
+        from_: str = '', 
+        to: str = '', 
+        # NOTE: custom params
+        interval: Literal['1min', '5min', '1hour'] = '1min'
+    ) -> list[dict]:
         return asyncio.run(self.astock_index_price_by_interval(symbol, from_, to, interval))
     
     @requires_plan(FMPPlan.BASIC)

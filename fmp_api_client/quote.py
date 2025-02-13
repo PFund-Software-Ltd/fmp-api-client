@@ -6,32 +6,31 @@ from fmp_api_client.plan import FMPPlan, requires_plan
 
 class Quote(Base):
     @requires_plan(FMPPlan.BASIC)
-    async def astock_quote(self, symbol: str) -> list[dict]:
+    async def astock_quote(
+        self, 
+        symbol: str,
+        # NOTE: custom params
+        short: bool=True
+    ) -> list[dict]:
         '''
         Access real-time stock quotes. 
         Get up-to-the-minute prices, changes, and volume data for individual stocks.
         '''
-        endpoint = 'quote'
+        if short:
+            endpoint = 'quote-short'
+        else:
+            endpoint = 'quote'
         params = {'symbol': symbol}
         return await self._request(endpoint, params=params)
     
     @requires_plan(FMPPlan.BASIC)
-    def stock_quote(self, symbol: str) -> list[dict]:
-        return asyncio.run(self.astock_quote(symbol))
-    
-    @requires_plan(FMPPlan.BASIC)
-    async def astock_quote_short(self, symbol: str) -> list[dict]:
-        '''
-        Get quick snapshots of real-time stock quotes. 
-        Access key stock data like current price, volume, and price changes for instant market insights.
-        '''
-        endpoint = 'quote-short'
-        params = {'symbol': symbol}
-        return await self._request(endpoint, params=params)
-    
-    @requires_plan(FMPPlan.BASIC)
-    def stock_quote_short(self, symbol: str) -> list[dict]:
-        return asyncio.run(self.astock_quote_short(symbol))
+    def stock_quote(
+        self, 
+        symbol: str, 
+        # NOTE: custom params
+        short: bool=True
+    ) -> list[dict]:
+        return asyncio.run(self.astock_quote(symbol, short=short))
     
     @requires_plan(FMPPlan.BASIC)
     async def aaftermarket_trade(self, symbol: str) -> list[dict]:
@@ -76,32 +75,31 @@ class Quote(Base):
         return asyncio.run(self.astock_price_change(symbol))
     
     @requires_plan(FMPPlan.BASIC)
-    async def astock_batch_quote(self, symbols: list[str]) -> list[dict]:
+    async def astock_batch_quote(
+        self, 
+        symbols: list[str],
+        # NOTE: custom params
+        short: bool=True
+    ) -> list[dict]:
         '''
         Retrieve multiple real-time stock quotes in a single request. 
         Access current prices, volume, and detailed data for multiple companies at once, making it easier to track large portfolios or monitor multiple stocks simultaneously.
         '''
-        endpoint = 'batch-quote'
+        if short:
+            endpoint = 'batch-quote-short'
+        else:
+            endpoint = 'batch-quote'
         params = {'symbols': ','.join(symbols)}
         return await self._request(endpoint, params=params)
     
     @requires_plan(FMPPlan.BASIC)
-    def stock_batch_quote(self, symbols: list[str]) -> list[dict]:
-        return asyncio.run(self.astock_batch_quote(symbols))
-    
-    @requires_plan(FMPPlan.BASIC)
-    async def astock_batch_quote_short(self, symbols: list[str]) -> list[dict]:
-        '''
-        Access real-time, short-form quotes for multiple stocks. 
-        Get a quick snapshot of key stock data such as current price, change, and volume for several companies in one streamlined request.
-        '''
-        endpoint = 'batch-quote-short'
-        params = {'symbols': ','.join(symbols)}
-        return await self._request(endpoint, params=params)
-    
-    @requires_plan(FMPPlan.BASIC)
-    def stock_batch_quote_short(self, symbols: list[str]) -> list[dict]:
-        return asyncio.run(self.astock_batch_quote_short(symbols))
+    def stock_batch_quote(
+        self, 
+        symbols: list[str],
+        # NOTE: custom params
+        short: bool=True
+    ) -> list[dict]:
+        return asyncio.run(self.astock_batch_quote(symbols, short=short))
     
     @requires_plan(FMPPlan.BASIC)
     async def abatch_aftermarket_trade(self, symbols: list[str]) -> list[dict]:
