@@ -14,6 +14,7 @@ from fmp_api_client.market_performance import MarketPerformance
 from fmp_api_client.quote import Quote
 from fmp_api_client.market_hours import MarketHours
 from fmp_api_client.discounted_cashflow import DiscountedCashflow
+from fmp_api_client.insider_trades import InsiderTrades
 
 
 class FMPClient:
@@ -32,6 +33,7 @@ class FMPClient:
         self.statements = Statements(self)
         self.market_performance = MarketPerformance(self)
         self.market_hours = MarketHours(self)
+        self.insider_trades = InsiderTrades(self)
         self.quote = Quote(self)
         self.discounted_cashflow = DiscountedCashflow(self)
         
