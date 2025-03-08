@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fmp-api-client"
-version = "0.0.1.dev1"
+version = "0.0.1"
 description = "Financial Modeling Prep API, Supports both sync and async"
 authors = ["Stephen Yau <softwareentrepreneer+fmp-api-client@gmail.com>"]
 readme = "README.md"
