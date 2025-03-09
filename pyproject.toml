@@ -1,16 +1,17 @@
-[tool.poetry]
+[project]
 name = "fmp-api-client"
 version = "0.0.1"
 description = "Financial Modeling Prep API, Supports both sync and async"
-authors = ["Stephen Yau <softwareentrepreneer+fmp-api-client@gmail.com>"]
+authors = [
+    { name="Stephen Yau", email="softwareentrepreneer+fmp-api-client@gmail.com" }
+]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.10"
-python-dotenv = "^1.0.1"
-httpx = "^0.28.1"
-
+requires-python = ">=3.10"
+dependencies = [
+    "python-dotenv (>=1.0.1,<2.0.0)",
+    "httpx (>=0.28.1,<0.29.0)"
+]
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
